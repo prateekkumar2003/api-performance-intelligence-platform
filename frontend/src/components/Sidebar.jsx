@@ -3,7 +3,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import SpeedIcon from '@mui/icons-material/Speed';
 import StorageIcon from '@mui/icons-material/Storage';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutlineOutlined';
 
 const Sidebar = () => {
   return (
