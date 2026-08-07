@@ -8,7 +8,7 @@ def generate_recommendations(api_metric):
 
     query_count = sql_queries.count()
 
-     if query_count > 10:
+    if query_count > 10:
 
         OptimizationRecommendation.objects.create(
             api_metric=api_metric,
@@ -66,7 +66,8 @@ def generate_recommendations(api_metric):
             recommendation_type="slow_api",
             severity="critical"
         )
-        slow_queries = sql_queries.filter(
+
+    slow_queries = sql_queries.filter(
         execution_time_ms__gt=200
     )
 
