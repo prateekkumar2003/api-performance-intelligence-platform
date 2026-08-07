@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/dashboard': {
-        target: 'http://localhost:8000',
+        target: 'http://localhost',
         changeOrigin: true,
       },
     }
