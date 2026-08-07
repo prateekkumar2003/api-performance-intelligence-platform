@@ -5,7 +5,8 @@ from .dashboard_views import (
     PerformanceIssuesView,
     TopProblematicAPIsView,
     SlowQueriesView,
-    DashboardSummaryView
+    DashboardSummaryView,
+    RecommendationsView
 )
 
 urlpatterns = [
