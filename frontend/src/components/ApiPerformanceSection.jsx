@@ -1,6 +1,18 @@
 import { useEffect, useState } from 'react';
 import { getAPIEndpoints, getAPIPerformance } from '../api';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    background: {
+      paper: '#1a1d24', // Matches the dashboard dark theme dropdowns
+    }
+  },
+});
 
 const ApiPerformanceSection = () => {
   const [endpoints, setEndpoints] = useState([]);
@@ -57,25 +69,47 @@ const ApiPerformanceSection = () => {
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Select API:</label>
-          <input 
-            list="api-endpoints-list"
-            value={selectedApi}
-            onChange={(e) => setSelectedApi(e.target.value)}
-            placeholder="Search API..."
-            style={{
-              padding: '8px 12px',
-              borderRadius: '8px',
-              border: '1px solid var(--border-color)',
-              background: 'var(--bg-secondary)',
-              color: 'var(--text-primary)',
-              minWidth: '300px'
-            }}
-          />
-          <datalist id="api-endpoints-list">
-            {endpoints.map((ep, idx) => (
-              <option key={idx} value={`${ep.method} ${ep.path}`} />
-            ))}
-          </datalist>
+          <ThemeProvider theme={darkTheme}>
+            <Autocomplete
+              options={endpoints.map(ep => `${ep.method} ${ep.path}`)}
+              value={selectedApi || null}
+              onChange={(event, newValue) => {
+                setSelectedApi(newValue || '');
+              }}
+              sx={{ minWidth: 350 }}
+              renderInput={(params) => (
+                <TextField 
+                  {...params} 
+                  placeholder="Search API..." 
+                  variant="outlined" 
+                  size="small"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '8px',
+                      background: 'var(--bg-secondary)',
+                      color: 'var(--text-primary)',
+                      '& fieldset': {
+                        borderColor: 'var(--border-color)',
+                      },
+                      '&:hover fieldset': {
+                        borderColor: 'var(--text-secondary)',
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: 'var(--accent-cyan)',
+                      },
+                      '& .MuiSvgIcon-root': {
+                        color: 'var(--text-secondary)',
+                      }
+                    },
+                    '& .MuiInputBase-input::placeholder': {
+                      color: 'var(--text-secondary)',
+                      opacity: 1,
+                    },
+                  }}
+                />
+              )}
+            />
+          </ThemeProvider>
         </div>
       </div>
 
