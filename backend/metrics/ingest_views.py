@@ -25,6 +25,7 @@ class TelemetryIngestAPIView(APIView):
             query_count=request.data[
                 "query_count"
             ],
+            request_id=request.request_id,
         )
 
         queries = request.data.get(

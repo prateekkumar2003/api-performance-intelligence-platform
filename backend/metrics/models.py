@@ -1,6 +1,8 @@
 from django.db import models
+import uuid
 
 class APIMetric(models.Model):
+    request_id = models.UUIDField(default=uuid.uuid4,editable=False,db_index=True)
     tenant = models.CharField(max_length=255)
     path = models.CharField(max_length=255)
     method = models.CharField(max_length=10)

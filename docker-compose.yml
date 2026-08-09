@@ -47,6 +47,7 @@ services:
     build: ./backend
     container_name: celery
     restart: always
+    # This command starts a Celery worker for your Django project
     command: celery -A config worker -l info
     volumes:
       - ./backend:/app

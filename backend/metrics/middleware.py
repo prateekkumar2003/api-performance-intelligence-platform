@@ -37,9 +37,11 @@ class MetricsMiddleware:
             path=request.path,
             method=request.method,
             status_code=response.status_code,
-            response_time_ms=response_time_ms
+            response_time_ms=response_time_ms,
+            request_id=request.request_id,
         )
-
+        # each request normally gets its own database connection/context, 
+        # so their query logs don't simply become one shared list.
         executed_queries = connection.queries[initial_query_count:]
 
         for query_data in executed_queries:

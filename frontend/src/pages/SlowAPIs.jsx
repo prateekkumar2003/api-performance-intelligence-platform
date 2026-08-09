@@ -22,6 +22,32 @@ const SlowAPIs = () => {
   }, []);
 
   const columns = [
+    { 
+      header: 'Request ID', 
+      accessor: 'request_id',
+      render: (row) => (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontFamily: 'monospace', fontSize: '0.9em' }}>
+            {row.request_id ? row.request_id.substring(0, 8) + '...' : '-'}
+          </span>
+          {row.request_id && (
+            <button
+              onClick={() => navigator.clipboard.writeText(row.request_id)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                color: 'var(--text-secondary)',
+                padding: '2px'
+              }}
+              title="Copy full Request ID"
+            >
+              📋
+            </button>
+          )}
+        </div>
+      )
+    },
     { header: 'Path', accessor: 'path' },
     { 
       header: 'Method', 

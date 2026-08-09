@@ -97,12 +97,19 @@ class DashboardSummaryView(APIView):
 
     def get(self, request):
 
-        total_requests = APIMetric.objects.count()
+        metrics = APIMetric.objects.all()
 
-        total_issues = PerformanceIssue.objects.count()
+        request_id = request.GET.get("request_id")
+
+        if request_id:
+            metrics = metrics.filter(request_id=request_id)
+
+        total_requests = metrics.count()
+
+        total_issues = PerformanceIssue.objects.filter(api_metric__in=metrics).count()
 
         avg_response = (
-            APIMetric.objects.aggregate(
+            metrics.aggregate(
                 Avg("response_time_ms")
             )["response_time_ms__avg"]
         )

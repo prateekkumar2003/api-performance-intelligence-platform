@@ -7,26 +7,32 @@ const DashboardSummary = () => {
   const [summary, setSummary] = useState(null);
   const [topApis, setTopApis] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [requestId, setRequestId] = useState('');
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [summaryRes, topApisRes] = await Promise.all([
+        getSummary(requestId || undefined),
+        getTopProblematicAPIs()
+      ]);
+
+      setSummary(summaryRes.data);
+      setTopApis(topApisRes.data);
+    } catch (error) {
+      console.error('Error fetching dashboard summary data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [summaryRes, topApisRes] = await Promise.all([
-          getSummary(),
-          getTopProblematicAPIs()
-        ]);
-
-        setSummary(summaryRes.data);
-        setTopApis(topApisRes.data);
-      } catch (error) {
-        console.error('Error fetching dashboard summary data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
+
+  const handleFilter = () => {
+    fetchData();
+  };
 
   const columns = [
     { header: 'Path', accessor: 'path' },
@@ -53,7 +59,39 @@ const DashboardSummary = () => {
 
   return (
     <div className="animate-fade-in">
-      <h1>Dashboard Summary</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+        <h1>Dashboard Summary</h1>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <input 
+            type="text" 
+            placeholder="Filter by Request ID..." 
+            value={requestId} 
+            onChange={(e) => setRequestId(e.target.value)}
+            style={{
+              padding: '8px 12px',
+              borderRadius: '8px',
+              border: '1px solid var(--border-color)',
+              background: 'var(--bg-secondary)',
+              color: 'var(--text-primary)',
+              minWidth: '300px'
+            }}
+          />
+          <button 
+            onClick={handleFilter}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '8px',
+              background: 'var(--accent-cyan)',
+              color: '#000',
+              border: 'none',
+              cursor: 'pointer',
+              fontWeight: 600
+            }}
+          >
+            Filter
+          </button>
+        </div>
+      </div>
 
       <div className="dashboard-grid">
         <MetricCard
