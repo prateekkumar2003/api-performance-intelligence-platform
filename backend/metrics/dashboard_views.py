@@ -102,7 +102,12 @@ class DashboardSummaryView(APIView):
         request_id = request.GET.get("request_id")
 
         if request_id:
-            metrics = metrics.filter(request_id=request_id)
+            import uuid
+            try:
+                uuid.UUID(request_id)
+                metrics = metrics.filter(request_id=request_id)
+            except ValueError:
+                metrics = metrics.none()
 
         total_requests = metrics.count()
 
