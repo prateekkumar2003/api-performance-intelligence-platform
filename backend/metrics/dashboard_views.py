@@ -26,6 +26,7 @@ class SlowAPIsView(APIView):
                 "response_time_ms": api.response_time_ms,
                 "status_code": api.status_code,
                 "created_at": api.created_at,
+                "request_id": api.request_id,
             })
 
         return Response(data)
