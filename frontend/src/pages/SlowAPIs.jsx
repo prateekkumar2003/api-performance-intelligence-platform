@@ -32,7 +32,26 @@ const SlowAPIs = () => {
           </span>
           {row.request_id && (
             <button
-              onClick={() => navigator.clipboard.writeText(row.request_id)}
+              onClick={() => {
+                if (navigator.clipboard && window.isSecureContext) {
+                  navigator.clipboard.writeText(row.request_id).catch(err => console.error('Copy failed', err));
+                } else {
+                  // Fallback for insecure contexts (HTTP over IP)
+                  const textArea = document.createElement("textarea");
+                  textArea.value = row.request_id;
+                  textArea.style.position = "absolute";
+                  textArea.style.left = "-999999px";
+                  document.body.prepend(textArea);
+                  textArea.select();
+                  try {
+                    document.execCommand('copy');
+                  } catch (error) {
+                    console.error('Fallback copy failed', error);
+                  } finally {
+                    textArea.remove();
+                  }
+                }
+              }}
               style={{
                 background: 'transparent',
                 border: 'none',
