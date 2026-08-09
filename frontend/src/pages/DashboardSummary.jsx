@@ -110,11 +110,13 @@ const DashboardSummary = () => {
       </div>
 
       <h2 style={{ marginTop: '40px' }}>Top Problematic APIs</h2>
-      <DataTable
-        columns={columns}
-        data={topApis}
-        keyField="path"
-      />
+      <div style={{ maxHeight: '400px', overflowY: 'auto', marginBottom: '24px' }}>
+        <DataTable
+          columns={columns}
+          data={topApis}
+          keyField="path"
+        />
+      </div>
 
       <ApiPerformanceSection />
     </div>

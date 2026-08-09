@@ -57,25 +57,25 @@ const ApiPerformanceSection = () => {
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <label style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Select API:</label>
-          <select 
+          <input 
+            list="api-endpoints-list"
             value={selectedApi}
             onChange={(e) => setSelectedApi(e.target.value)}
+            placeholder="Search API..."
             style={{
               padding: '8px 12px',
               borderRadius: '8px',
               border: '1px solid var(--border-color)',
               background: 'var(--bg-secondary)',
               color: 'var(--text-primary)',
-              minWidth: '250px',
-              cursor: 'pointer'
+              minWidth: '300px'
             }}
-          >
+          />
+          <datalist id="api-endpoints-list">
             {endpoints.map((ep, idx) => (
-              <option key={idx} value={`${ep.method} ${ep.path}`}>
-                {ep.method} {ep.path}
-              </option>
+              <option key={idx} value={`${ep.method} ${ep.path}`} />
             ))}
-          </select>
+          </datalist>
         </div>
       </div>
 
