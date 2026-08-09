@@ -14,7 +14,7 @@ from .models import (
 class SlowAPIsView(APIView):
     def get(self, request):
 
-        slow_apis = APIMetric.objects.filter(response_time_ms__gt=1000).order_by('-response_time_ms')[:20]
+        slow_apis = APIMetric.objects.filter(response_time_ms__gt=1000).order_by('-response_time_ms')[:100]
 
         data = []
 
@@ -38,7 +38,7 @@ class PerformanceIssuesView(APIView):
         issues = (
             PerformanceIssue.objects
             .select_related("api_metric")
-            .order_by("-created_at")[:50]
+            .order_by("-created_at")[:100]
         )
 
         data = []
@@ -78,7 +78,7 @@ class TopProblematicAPIsView(APIView):
                 avg_response=Avg("response_time_ms"),
                 total_requests=Count("id")
             )
-            .order_by("-avg_response")[:10]
+            .order_by("-avg_response")[:100]
         )
 
         return Response(apis)
@@ -90,7 +90,7 @@ class SlowQueriesView(APIView):
 
         queries = (
             SQLQueryMetric.objects
-            .order_by("-execution_time_ms")[:20]
+            .order_by("-execution_time_ms")[:100]
         )
 
         data = []
@@ -144,7 +144,7 @@ class RecommendationsView(APIView):
         recommendations = (
             OptimizationRecommendation.objects
             .select_related("api_metric")
-            .order_by("-created_at")[:50]
+            .order_by("-created_at")[:100]
         )
 
         data = []
