@@ -60,8 +60,19 @@ class TopProblematicAPIsView(APIView):
 
     def get(self, request):
 
+        metrics = APIMetric.objects.all()
+        request_id = request.GET.get("request_id")
+        
+        if request_id:
+            import uuid
+            try:
+                uuid.UUID(request_id)
+                metrics = metrics.filter(request_id=request_id)
+            except ValueError:
+                metrics = metrics.none()
+
         apis = (
-            APIMetric.objects
+            metrics
             .values("path")
             .annotate(
                 avg_response=Avg("response_time_ms"),

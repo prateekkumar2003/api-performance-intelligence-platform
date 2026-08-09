@@ -7,7 +7,7 @@ const api = axios.create({
 export const getSummary = (requestId) => api.get('/summary/', { params: { request_id: requestId } });
 export const getSlowAPIs = () => api.get('/slow-apis/');
 export const getPerformanceIssues = () => api.get('/issues/');
-export const getTopProblematicAPIs = () => api.get('/top-apis/');
+export const getTopProblematicAPIs = (requestId) => api.get('/top-apis/', { params: { request_id: requestId } });
 export const getSlowQueries = () => api.get('/slow-queries/');
 export const getRecommendations = () => api.get('/recommendations/');
 

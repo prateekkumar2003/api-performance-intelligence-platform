@@ -14,7 +14,7 @@ const DashboardSummary = () => {
     try {
       const [summaryRes, topApisRes] = await Promise.all([
         getSummary(requestId || undefined),
-        getTopProblematicAPIs()
+        getTopProblematicAPIs(requestId || undefined)
       ]);
 
       setSummary(summaryRes.data);
