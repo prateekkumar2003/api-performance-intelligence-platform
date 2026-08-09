@@ -6,7 +6,9 @@ from .dashboard_views import (
     TopProblematicAPIsView,
     SlowQueriesView,
     DashboardSummaryView,
-    RecommendationsView
+    RecommendationsView,
+    APIEndpointsView,
+    APIPerformanceView
 )
 
 urlpatterns = [
@@ -16,4 +18,6 @@ urlpatterns = [
     path("slow-queries/", SlowQueriesView.as_view()),
     path("summary/", DashboardSummaryView.as_view()),
     path("recommendations/", RecommendationsView.as_view()),
+    path("endpoints/", APIEndpointsView.as_view()),
+    path("api-performance/", APIPerformanceView.as_view()),
 ]

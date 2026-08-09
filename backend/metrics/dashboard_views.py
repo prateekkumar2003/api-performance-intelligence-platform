@@ -166,3 +166,56 @@ class RecommendationsView(APIView):
             })
 
         return Response(data)
+
+class APIEndpointsView(APIView):
+    def get(self, request):
+        endpoints = (
+            APIMetric.objects
+            .values("path", "method")
+            .distinct()
+            .order_by("path", "method")
+        )
+        return Response(endpoints)
+
+
+class APIPerformanceView(APIView):
+    def get(self, request):
+        path = request.GET.get('path')
+        method = request.GET.get('method')
+        
+        if not path or not method:
+            return Response({"error": "path and method are required"}, status=400)
+            
+        metrics = APIMetric.objects.filter(path=path, method=method)
+        
+        from django.db.models.functions import TruncMinute
+        per_minute = (
+            metrics.annotate(minute=TruncMinute('created_at'))
+            .values('minute')
+            .annotate(avg_response_time=Avg('response_time_ms'))
+            .order_by('minute')
+        )
+        
+        buckets = {}
+        for row in per_minute:
+            minute_dt = row['minute']
+            if not minute_dt:
+                continue
+            bucket_minute = minute_dt.replace(minute=(minute_dt.minute // 5) * 5, second=0, microsecond=0)
+            
+            if bucket_minute not in buckets:
+                buckets[bucket_minute] = []
+            buckets[bucket_minute].append(row['avg_response_time'])
+            
+        data = []
+        for bucket, times in sorted(buckets.items()):
+            data.append({
+                "time": bucket.strftime("%H:%M"),
+                "avg_response_time": round(sum(times) / len(times), 2)
+            })
+            
+        return Response({
+            "api": path,
+            "method": method,
+            "data": data
+        })

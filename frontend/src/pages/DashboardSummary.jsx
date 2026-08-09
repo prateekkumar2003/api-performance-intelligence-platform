@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import MetricCard from '../components/MetricCard';
 import { getSummary, getTopProblematicAPIs } from '../api';
 import DataTable from '../components/DataTable';
+import ApiPerformanceSection from '../components/ApiPerformanceSection';
 
 const DashboardSummary = () => {
   const [summary, setSummary] = useState(null);
@@ -114,6 +115,8 @@ const DashboardSummary = () => {
         data={topApis}
         keyField="path"
       />
+
+      <ApiPerformanceSection />
     </div>
   );
 };
